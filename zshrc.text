@@ -1,0 +1,26 @@
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads$
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+function code {
+    if [[ $# = 0 ]]
+    then
+        open -a "Visual Studio Code"
+    else
+        local argPath="$1"
+        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
+        open -a "Visual Studio Code" "$argPath"
+    fi
+}
+
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+zstyle ':vcs_info:git:*' formats '%F{99}git:(%f%F{164}%b%f%F{99})%f'
+#zstyle ':vcs_info:*' enable git
+
+PROMPT='%n: %1~ ${vcs_info_msg_0_}
+$ '
